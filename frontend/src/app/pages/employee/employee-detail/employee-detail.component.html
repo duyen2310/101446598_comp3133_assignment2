@@ -1,1 +1,18 @@
-<p>employee-detail works!</p>
+<div *ngIf="isLoading">Loading employee details...</div>
+
+<div *ngIf="errorMessage" class="error">
+  {{ errorMessage }}
+</div>
+
+<div *ngIf="employee && !isLoading">
+  <h2>{{ employee.first_name }} {{ employee.last_name }}</h2>
+  <p><strong>Email:</strong> {{ employee.email }}</p>
+  <p><strong>Gender:</strong> {{ employee.gender }}</p>
+  <p><strong>Designation:</strong> {{ employee.designation }}</p>
+  <p><strong>Department:</strong> {{ employee.department }}</p>
+  <p><strong>Salary:</strong> {{ employee.salary | currency }}</p>
+  <p><strong>Date of Joining:</strong> {{ employee.date_of_joining | date }}</p>
+  <img *ngIf="employee.employee_photo" [src]="employee.employee_photo" alt="Photo" width="200" />
+
+  <button (click)="goBack()">Back to List</button>
+</div>

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { EmployeeService } from '../../../services/employee/employee.service';
-import { Employee } from '../../../models/employee.model'; // adjust path if needed
+import { Employee } from '../../../models/employee.model';
 import { CommonModule } from '@angular/common'; 
 import { Router, RouterModule } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog'; 
