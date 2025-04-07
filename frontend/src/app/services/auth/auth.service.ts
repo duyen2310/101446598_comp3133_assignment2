@@ -59,9 +59,6 @@ export class AuthService {
   
 
   login(username: string, password: string): Observable<LoginResponse> {
-    console.log(username)
-    console.log(password)
-
     const graphqlQuery = {
       query: `
         query Login($username: String!, $password: String!) {

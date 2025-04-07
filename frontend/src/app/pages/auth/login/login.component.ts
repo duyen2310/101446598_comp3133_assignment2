@@ -14,7 +14,7 @@ import { Router, RouterModule } from '@angular/router';
 export class LoginComponent {
   loginForm: FormGroup;
   errorMessage: string = '';
-  isSubmitting: boolean = false;  // Track the submission state
+  isSubmitting: boolean = false; 
 
   constructor(
     private fb: FormBuilder,
@@ -22,7 +22,7 @@ export class LoginComponent {
     private router: Router
   ) {
     this.loginForm = this.fb.group({
-      username: ['', Validators.required], // Changed from email to username
+      username: ['', Validators.required], 
       password: ['', Validators.required],
     });
   }
