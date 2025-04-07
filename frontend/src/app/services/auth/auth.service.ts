@@ -1,20 +1,16 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 
 interface SignupResponse {
-  data:{
-    signup: {
-      accessToken: string;
-    };
-  }
+  data: {
+    signup: string; 
+  };
 }
 
 interface LoginResponse {
-  data:{
-    login: {
-      accessToken: string;
-    };
+  data: {
+    login: string; 
   };
 }
 
@@ -25,6 +21,7 @@ export class AuthService {
   private graphqlUrl = 'http://localhost:3000/graphql';
 
   constructor(private http: HttpClient) {}
+
   storeToken(token: string): void {
     localStorage.setItem('accessToken', token);
   }
@@ -40,7 +37,8 @@ export class AuthService {
   isAuthenticated(): boolean {
     return !!this.getToken();
   }
-  signup( username: string, email: string, password: string ): Observable<any> {
+
+  signup(username: string, email: string, password: string): Observable<any> {
     const graphqlQuery = {
       query: `
         mutation Signup($username: String!, $email: String!, $password: String!) {
@@ -53,10 +51,15 @@ export class AuthService {
         password: password,
       },
     };
-  
-    return this.http.post<SignupResponse>(this.graphqlUrl, graphqlQuery);
+
+    return this.http.post<SignupResponse>(this.graphqlUrl, graphqlQuery).pipe(
+      tap((res) => {
+        if (res.data.signup) {
+          this.storeToken(res.data.signup);
+        }
+      })
+    );
   }
-  
 
   login(username: string, password: string): Observable<LoginResponse> {
     const graphqlQuery = {
@@ -70,10 +73,13 @@ export class AuthService {
         password: password,
       },
     };
-  
-    return this.http.post<LoginResponse>(this.graphqlUrl, graphqlQuery);
+
+    return this.http.post<LoginResponse>(this.graphqlUrl, graphqlQuery).pipe(
+      tap((res) => {
+        if (res.data.login) {
+          this.storeToken(res.data.login);
+        }
+      })
+    );
   }
-  
-
-
 }

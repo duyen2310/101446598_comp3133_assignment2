@@ -1,1 +1,44 @@
-<p>employees works!</p>
+<div class="employee-container">
+    <h2>Employees</h2>
+  
+    <div *ngIf="isLoading">Loading employees...</div>
+    <div *ngIf="errorMessage">{{ errorMessage }}</div>
+    <!-- Employee Table -->
+    <table *ngIf="!isLoading && employees.length > 0" class="employee-table">
+      <thead>
+        <tr>
+          <th>Photo</th>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Designation</th>
+          <th>Department</th>
+          <th>Salary</th>
+          <th>Date of Joining</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let emp of employees">
+          <td>
+            <img
+              [src]="emp.employee_photo"
+              alt="Employee Photo"
+              width="50"
+              height="50"
+            />
+          </td>
+          <td>{{ emp.first_name }} {{ emp.last_name }}</td>
+          <td>{{ emp.email }}</td>
+          <td>{{ emp.designation }}</td>
+          <td>{{ emp.department }}</td>
+          <td>{{ emp.salary}}</td>
+          <td>{{ emp.date_of_joining | date: 'shortDate'}}</td>
+        </tr>
+      </tbody>
+    </table>
+  
+    <!-- No Employees Found -->
+    <div *ngIf="!isLoading && employees.length === 0">
+      No employees found.
+    </div>
+  </div>
+  

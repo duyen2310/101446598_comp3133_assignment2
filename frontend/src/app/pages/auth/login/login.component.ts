@@ -33,7 +33,7 @@ export class LoginComponent {
       const { username, password } = this.loginForm.value;
       this.authService.login(username, password).subscribe({
         next: (response) => {
-          this.authService.storeToken(response.data.login.accessToken);
+          this.authService.storeToken(response.data.login);
           this.router.navigate(['/employees']);
           this.isSubmitting = false; 
         },
