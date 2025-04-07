@@ -30,7 +30,7 @@ employee-management-frontend/
 ```bash
 ├── src/
 │   ├── app/
-│   │   ├── components/           # Reusable UI components (e.g., employee-list, employee-form)
+│   │   ├── pages/           # Reusable UI components (e.g., employee-list, employee-form)
 │   │   ├── services/             # Services for API calls and business logic
 │   │   ├── models/               # TypeScript interfaces for data models (e.g., Employee)
 │   │   ├── app.component.*       # Root component
