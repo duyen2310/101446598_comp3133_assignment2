@@ -26,38 +26,41 @@ export class AuthService {
 
   constructor(private http: HttpClient) {}
 
-  signup(signupInput: any): Observable<SignupResponse> {
+  signup( username: string, email: string, password: string ): Observable<any> {
     const graphqlQuery = {
       query: `
-        mutation Signup($input: SignupInput!) {
-          signup(input: $input) {
-            accessToken
-          }
+        mutation Signup($username: String!, $email: String!, $password: String!) {
+          signup(username: $username, email: $email, password: $password)
         }
       `,
       variables: {
-        input: signupInput,
+        username: username,
+        email: email,
+        password: password,
       },
     };
-    return this.http.post<SignupResponse>(this.graphqlUrl, graphqlQuery);
+  
+    return this.http.post<any>(this.graphqlUrl, graphqlQuery);
   }
+  
 
-  login(loginInput: any): Observable<LoginResponse> {
-    console.log(loginInput)
+  login(username: string, password: string): Observable<LoginResponse> {
+
     const graphqlQuery = {
       query: `
-        query Login($input: LoginInput!) {
-          login(input: $input) {
-            accessToken
-          }
+        query Login($username: String!, $password: String!) {
+          login(username: $username, password: $password)
         }
       `,
       variables: {
-        input: loginInput,
+        username: username,
+        password: password,
       },
     };
+  
     return this.http.post<LoginResponse>(this.graphqlUrl, graphqlQuery);
   }
+  
 
   storeToken(token: string): void {
     localStorage.setItem('accessToken', token);

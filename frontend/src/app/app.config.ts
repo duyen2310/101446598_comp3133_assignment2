@@ -1,31 +1,22 @@
-import { ApplicationConfig, provideZoneChangeDetection, inject } from '@angular/core';
-import { provideRouter } from '@angular/router';
+import { ApplicationConfig, importProvidersFrom } from '@angular/core';
+import { provideRouter, Routes } from '@angular/router';
+import { LoginComponent } from './pages/auth/login/login.component';
+import { SignupComponent } from './pages/auth/signup/signup.component';
+import { AuthGuard } from './services/auth/auth.guard';
+import { HttpClientModule } from '@angular/common/http';
+import { EmployeeListComponent } from './pages/employee/employee-list/employee-list.component';
 
-import { routes } from './app.routes';
-import { provideHttpClient } from '@angular/common/http';
-import { provideApollo } from 'apollo-angular';
-import { HttpLink } from 'apollo-angular/http';
-import { InMemoryCache } from '@apollo/client/core';
-import { provideAnimations } from '@angular/platform-browser/animations';
-import { ReactiveFormsModule } from '@angular/forms';
-import { importProvidersFrom } from '@angular/core';
-
+const routes: Routes = [
+  { path: 'login', component: LoginComponent },
+  { path: 'signup', component: SignupComponent },
+  { path: 'employees', component: EmployeeListComponent, canActivate: [AuthGuard] },
+  { path: '', redirectTo: '/login', pathMatch: 'full' },
+];
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideZoneChangeDetection({ eventCoalescing: true }), 
-    provideRouter(routes), 
-    provideHttpClient(), 
-    provideAnimations(),
-    importProvidersFrom(ReactiveFormsModule),
-    provideApollo(() => {
-      const httpLink = inject(HttpLink);
-
-      return {
-        link: httpLink.create({
-          uri: '<%= endpoint %>',
-        }),
-        cache: new InMemoryCache(),
-      };
-    })]
+    provideRouter(routes),
+    AuthGuard,
+    importProvidersFrom(HttpClientModule),
+  ],
 };
