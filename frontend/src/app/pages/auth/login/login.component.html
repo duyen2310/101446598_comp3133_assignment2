@@ -1,5 +1,6 @@
 <div class="login-container">
-  <h2 class="login-title">Log In</h2>
+  <h1 class="login-title">WELCOME TO EMPLOYEE MANAGEMENT</h1>
+  <h2 class="login-title">LOGIN</h2>
   <form class="login-form" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
     <div class="form-group">
       <input placeholder="Username" class="form-input" type="text" id="username" formControlName="username">
@@ -17,7 +18,7 @@
 
     <button class="login-btn" type="submit" [disabled]="loginForm.invalid || isSubmitting">
       <span *ngIf="!isSubmitting">Log In</span>
-      <span *ngIf="isSubmitting">Logging In...</span>
+      <span *ngIf="isSubmitting">Loading</span>
     </button>
 
     <div *ngIf="errorMessage" class="error-msg">{{ errorMessage }}</div>

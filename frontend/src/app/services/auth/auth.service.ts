@@ -25,7 +25,21 @@ export class AuthService {
   private graphqlUrl = 'http://localhost:3000/graphql';
 
   constructor(private http: HttpClient) {}
+  storeToken(token: string): void {
+    localStorage.setItem('accessToken', token);
+  }
 
+  getToken(): string | null {
+    return localStorage.getItem('accessToken');
+  }
+
+  clearToken(): void {
+    localStorage.removeItem('accessToken');
+  }
+
+  isAuthenticated(): boolean {
+    return !!this.getToken();
+  }
   signup( username: string, email: string, password: string ): Observable<any> {
     const graphqlQuery = {
       query: `
@@ -40,11 +54,13 @@ export class AuthService {
       },
     };
   
-    return this.http.post<any>(this.graphqlUrl, graphqlQuery);
+    return this.http.post<SignupResponse>(this.graphqlUrl, graphqlQuery);
   }
   
 
   login(username: string, password: string): Observable<LoginResponse> {
+    console.log(username)
+    console.log(password)
 
     const graphqlQuery = {
       query: `
@@ -62,19 +78,5 @@ export class AuthService {
   }
   
 
-  storeToken(token: string): void {
-    localStorage.setItem('accessToken', token);
-  }
 
-  getToken(): string | null {
-    return localStorage.getItem('accessToken');
-  }
-
-  clearToken(): void {
-    localStorage.removeItem('accessToken');
-  }
-
-  isAuthenticated(): boolean {
-    return !!this.getToken();
-  }
 }
