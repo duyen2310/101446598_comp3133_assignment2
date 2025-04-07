@@ -1,1 +1,15 @@
-<p>employee-add works!</p>
+<h2>Add Employee</h2>
+<form [formGroup]="employeeForm" (ngSubmit)="onSubmit()" enctype="multipart/form-data">
+  <input formControlName="first_name" placeholder="First Name" required />
+  <input formControlName="last_name" placeholder="Last Name" required />
+  <input formControlName="email" placeholder="Email" type="email" required />
+  <input formControlName="gender" placeholder="Gender" required />
+  <input formControlName="designation" placeholder="Designation" required />
+  <input formControlName="salary" placeholder="Salary" type="number" required />
+  <input formControlName="date_of_joining" type="date" required />
+  <input formControlName="department" placeholder="Department" required />
+  
+  <input type="file" (change)="onFileChange($event)" />
+
+  <button type="submit" [disabled]="employeeForm.invalid">Add Employee</button>
+</form>

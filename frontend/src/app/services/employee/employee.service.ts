@@ -82,12 +82,65 @@ export class EmployeeService {
     );
   }
   
-}
+
   // updateEmployee(id: string, employee: any): Observable<any> {
   //   return this.http.put(`${this.apiUrl}`, employee);
   // }
 
-  // deleteEmployee(id: string): Observable<any> {
-  //   return this.http.delete(`${this.apiUrl}`);
-  // }
-// }
+  searchEmployeeByEid(id: string): Observable<{ data: { searchEmployeeByEid: Employee } }> {
+    const query = {
+      query: `
+        query searchEmployeeByEid($eid: ID!) {
+          searchEmployeeByEid(eid: $eid) {
+            _id
+            first_name
+            last_name
+            email
+            gender
+            designation
+            salary
+            date_of_joining
+            department
+            employee_photo
+          }
+        }
+      `,
+      variables: {
+        eid: id 
+      }
+    };
+  
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.authService.getToken()}`
+    });
+  
+    return this.http.post<{ data: { searchEmployeeByEid: Employee } }>(
+      this.graphUrl,
+      query,
+      { headers }
+    );
+  }
+  
+  deleteEmployee(id: string): Observable<{ data: { deleteEmployee: String } }> {
+    const query = {
+      query: `
+        mutation deleteEmployee($eid: ID!) {
+          deleteEmployee(eid: $eid)
+        }
+      `,
+      variables: {
+        eid: id  // Passing the id as 'eid' as per the mutation argument
+      }
+    };
+  
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.authService.getToken()}`
+    });
+  
+    return this.http.post<{ data: { deleteEmployee: String } }>(
+      this.graphUrl,
+      query,
+      { headers }
+    );
+  }  
+}
