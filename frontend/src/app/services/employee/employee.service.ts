@@ -11,7 +11,7 @@ import { AuthService } from '../auth/auth.service';
 })
 export class EmployeeService {
 
-  private graphUrl = 'http://localhost:3000/graphql';
+  private graphUrl = 'https://101446598-comp-3133-101446598-assignment1.vercel.app';
 
   constructor(private http: HttpClient, private authService: AuthService) { }
 
