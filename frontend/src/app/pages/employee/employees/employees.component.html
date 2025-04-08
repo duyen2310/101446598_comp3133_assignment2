@@ -1,40 +1,52 @@
 <div class="employee-container">
     <h2>Employees</h2>
+    <div class="search-bar">
+        <select [(ngModel)]="searchField" class="search-select">
+          <option value="designation">Designation</option>
+          <option value="department">Department</option>
+        </select>
+      
+        <input
+          type="text"
+          placeholder="Search by selected field"
+          [(ngModel)]="searchTerm"
+          class="search-input"
+        />
+      
+        <button (click)="onSearch()" class="search-button">Search</button>
+      </div>
+      
+      
+      
     <button class="add-btn" type="button" [routerLink]="'/employee-add'">Add Employee</button>
 
     <div *ngIf="isLoading">Loading employees...</div>
     <div *ngIf="errorMessage">{{ errorMessage }}</div>
-    <!-- Employee Table -->
     <table *ngIf="!isLoading && employees.length > 0" class="employee-table">
         <thead>
           <tr>
             <th>Photo</th>
             <th>Name</th>
-            <th>Email</th>
             <th>Designation</th>
             <th>Department</th>
-            <th>Salary</th>
             <th>Date of Joining</th>
-            <th>Actions</th> <!-- New column -->
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let emp of employees">
             <td>
-              <img
-                [src]="emp.employee_photo"
+                <img
+                [src]="emp.employee_photo ? emp.employee_photo : 'assets/default.jpg'"
                 alt="Employee Photo"
                 width="50"
-                height="50"
-              />
+                />
+
             </td>
             <td>{{ emp.first_name }} {{ emp.last_name }}</td>
-            <td>{{ emp.email }}</td>
             <td>{{ emp.designation }}</td>
             <td>{{ emp.department }}</td>
-            <td>{{ emp.salary }}</td>
             <td>{{ emp.date_of_joining | date: 'shortDate' }}</td>
-            <td>{{ emp._id}}</td>
 
             <td>
               <button (click)="viewDetails(emp._id)" class="action-btn view-btn">View</button>

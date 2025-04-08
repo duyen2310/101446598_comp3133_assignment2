@@ -45,4 +45,11 @@ export class EmployeeDetailComponent implements OnInit {
   goBack(): void {
     this.router.navigate(['/employees']);
   }
+  
+  updateEmployee(): void {
+    if (this.employee && this.employee._id) {
+      this.router.navigate(['/employee-update', this.employee._id]);
+    }
+  }
+  
 }

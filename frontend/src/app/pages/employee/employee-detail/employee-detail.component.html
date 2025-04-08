@@ -14,5 +14,8 @@
   <p><strong>Date of Joining:</strong> {{ employee.date_of_joining | date }}</p>
   <img *ngIf="employee.employee_photo" [src]="employee.employee_photo" alt="Photo" width="200" />
 
-  <button (click)="goBack()">Back to List</button>
+  <div class="buttons" style="margin-top: 20px;">
+    <button (click)="goBack()">Back to List</button>
+    <button (click)="updateEmployee()">Update</button>
+  </div>
 </div>

@@ -7,6 +7,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { EmployeesComponent } from './pages/employee/employees/employees.component';
 import { EmployeeAddComponent } from './pages/employee/employee-add/employee-add.component';
 import { EmployeeDetailComponent } from './pages/employee/employee-detail/employee-detail.component';
+import { EmployeeUpdateComponent } from './pages/employee/employee-update/employee-update.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -15,7 +16,7 @@ const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
   { path: 'employee-add', component: EmployeeAddComponent },
   { path: 'employee-details/:id', component: EmployeeDetailComponent },
-
+  { path: 'employee-update/:id', component: EmployeeUpdateComponent},
 ];
 
 export const appConfig: ApplicationConfig = {

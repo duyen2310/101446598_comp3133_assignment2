@@ -7,18 +7,21 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { DeleteConfirmationDialogComponent } from '../delete-confirmation-dialog/delete-confirmation-dialog.component';
+import { FormsModule } from '@angular/forms';
 @Component({
   selector: 'app-employees',
   standalone: true,
-  imports: [CommonModule, RouterModule, MatDialogModule, MatButtonModule],
+  imports: [CommonModule, RouterModule, MatDialogModule, MatButtonModule, FormsModule],
   templateUrl: './employees.component.html',
   styleUrls: ['./employees.component.css']
 })
 export class EmployeesComponent implements OnInit {
-
+  
   employees: Employee[] = [];
   isLoading: boolean = true;
   errorMessage: string = '';
+  searchTerm: string = '';
+  searchField: string = 'designation'; // Default search field
 
   constructor(
     private employeeService: EmployeeService, 
@@ -27,11 +30,51 @@ export class EmployeesComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.fetchEmployees();
+    this.fetchEmployees(); // Fetch all employees initially
   }
 
-  viewDetails(id: any) {
-    this.router.navigate(['/employee-details', id]);
+  onSearch(): void {
+    if (this.searchTerm) {
+      this.isLoading = true;
+      if (this.searchField === 'designation') {
+        this.employeeService.searchEmployeeByField(this.searchTerm, null).subscribe({
+          next: (res: any) => {
+            this.employees = res.data.searchEmployeeByField.map((emp: Employee) => {
+              emp.date_of_joining = this.convertDate(emp.date_of_joining);
+              return emp;
+            });
+            this.isLoading = false;
+          },
+          error: (err: any) => {
+            this.errorMessage = 'Failed to load employees.';
+            this.isLoading = false;
+            console.error(err);
+          }
+        });
+      } else {
+        this.employeeService.searchEmployeeByField(null, this.searchTerm).subscribe({
+          next: (res: any) => {
+            this.employees = res.data.searchEmployeeByField.map((emp: Employee) => {
+              emp.date_of_joining = this.convertDate(emp.date_of_joining);
+
+              return emp;
+            });
+            this.isLoading = false;
+          },
+          error: (err: any) => {
+            this.errorMessage = 'Failed to load employees.';
+            this.isLoading = false;
+            console.error(err);
+          }
+        });
+      }
+    } else {
+      this.fetchEmployees(); 
+    }
+  }
+
+  viewDetails(id: any): void {
+    this.router.navigate(['/employee-details', id]); 
   }
 
   deleteEmployee(id: any): void {
@@ -44,7 +87,7 @@ export class EmployeesComponent implements OnInit {
       if (result === 'confirm') {
         this.employeeService.deleteEmployee(id).subscribe({
           next: () => {
-            this.fetchEmployees();
+            this.fetchEmployees(); // Refresh the employee list after deletion
           },
           error: (err) => {
             console.error('Error deleting employee:', err);
@@ -59,16 +102,7 @@ export class EmployeesComponent implements OnInit {
     this.employeeService.getAllEmployee().subscribe({
       next: (res: any) => {
         this.employees = res.data.getAllEmployees.map((emp: Employee) => {
-          const dateOfJoiningStr: string = emp.date_of_joining.toString();  
-          const num = parseInt(dateOfJoiningStr);
-
-          if (!isNaN(num)) {
-            emp.date_of_joining = new Date(num);
-          } else {
-            emp.date_of_joining = new Date(); 
-          }
-
-          console.log(emp.date_of_joining); 
+          emp.date_of_joining = this.convertDate(emp.date_of_joining);
           return emp;
         });
         this.isLoading = false;
@@ -79,5 +113,11 @@ export class EmployeesComponent implements OnInit {
         console.error(err);
       }
     });
+  }
+
+  private convertDate(date: any): Date {
+    const dateStr = date.toString();
+    const num = parseInt(dateStr);
+    return !isNaN(num) ? new Date(num) : new Date();
   }
 }

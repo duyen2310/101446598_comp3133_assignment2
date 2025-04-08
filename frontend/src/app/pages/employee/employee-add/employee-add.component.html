@@ -1,9 +1,16 @@
-<h2>Add Employee</h2>
 <form [formGroup]="employeeForm" (ngSubmit)="onSubmit()" enctype="multipart/form-data">
+    <h2>Add Employee</h2>
+
   <input formControlName="first_name" placeholder="First Name" required />
   <input formControlName="last_name" placeholder="Last Name" required />
   <input formControlName="email" placeholder="Email" type="email" required />
-  <input formControlName="gender" placeholder="Gender" required />
+  <label for="gender">Gender:</label>
+  <select formControlName="gender" id="gender" required>
+    <option value="" disabled>Select Gender</option>
+    <option value="Male">Male</option>
+    <option value="Female">Female</option>
+    <option value="Other">Other</option>
+  </select>
   <input formControlName="designation" placeholder="Designation" required />
   <input formControlName="salary" placeholder="Salary" type="number" required />
   <input formControlName="date_of_joining" type="date" required />

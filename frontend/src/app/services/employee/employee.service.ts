@@ -44,6 +44,7 @@ export class EmployeeService {
       { headers }
     );
   }
+  
 
   addEmployee(employee: Employee): Observable<{ data: { addEmployee: Employee } }> {
     const query = {
@@ -81,11 +82,82 @@ export class EmployeeService {
       { headers }
     );
   }
-  
+  updateEmployee(id: string, employee: Employee): Observable<{ data: { updateEmployee: Employee } }> {
+    const query = {
+      query: `
+        mutation updateEmployee($eid: ID!, $input: EmployeeInput!) {
+          updateEmployee(eid: $eid, input: $input) {
+            _id
+            first_name
+            last_name
+            email
+            designation
+            salary
+            date_of_joining
+            department
+            employee_photo
+          }
+        }
+      `,
+      variables: {
+        eid: id,
+        input: employee
+      }
+    };
 
-  // updateEmployee(id: string, employee: any): Observable<any> {
-  //   return this.http.put(`${this.apiUrl}`, employee);
-  // }
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.authService.getToken()}`
+    });
+  
+  
+    return this.http.post<{ data: { updateEmployee: Employee } }>(this.graphUrl, query,{headers});
+  }
+  updateEmployeewithPhoto(id: string, employee: Employee, selectedFile: File | null): Observable<{ data: { updateEmployee: Employee } }> {
+    const query = {
+      query: `
+        mutation updateEmployee($eid: ID!, $input: EmployeeInput!) {
+          updateEmployee(eid: $eid, input: $input) {
+            _id
+            first_name
+            last_name
+            email
+            designation
+            salary
+            date_of_joining
+            department
+            employee_photo
+          }
+        }
+      `,
+      variables: {
+        eid: id,
+        input: { 
+          first_name: employee.first_name,
+          last_name: employee.last_name,
+          email: employee.email,
+          designation: employee.designation,
+          department: employee.department,
+          salary: employee.salary,
+          date_of_joining: employee.date_of_joining,
+        }
+      }
+    };
+  
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.authService.getToken()}`,
+    });
+  
+    if (selectedFile) {
+      const formData = new FormData();
+      formData.append('employee_photo', selectedFile, selectedFile.name);  
+      formData.append('employee_data', JSON.stringify(query.variables));  
+  
+      return this.http.post<any>(`${this.graphUrl}`, formData, { headers });
+    } else {
+      return this.http.post<{ data: { updateEmployee: Employee } }>(this.graphUrl, query, { headers });
+    }
+  }
+  
 
   searchEmployeeByEid(id: string): Observable<{ data: { searchEmployeeByEid: Employee } }> {
     const query = {
@@ -129,7 +201,7 @@ export class EmployeeService {
         }
       `,
       variables: {
-        eid: id  // Passing the id as 'eid' as per the mutation argument
+        eid: id 
       }
     };
   
@@ -143,4 +215,41 @@ export class EmployeeService {
       { headers }
     );
   }  
+
+
+  searchEmployeeByField(designation: string | null, department: string | null): Observable<{ data: { searchEmployeeByField: Employee[] } }> {
+    const query = {
+      query: `
+        query searchEmployeeByField($designation: String, $department: String) {
+    searchEmployeeByField(designation: $designation, department: $department) {
+        _id
+        first_name
+        last_name
+        email
+        gender
+        designation
+        salary
+        date_of_joining
+        department
+        employee_photo
+    }
+}
+      `,
+      variables: {
+        designation: designation || null, 
+        department: department || null     
+      }
+    };
+  
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.authService.getToken()}`
+    });
+  
+    return this.http.post<{ data: { searchEmployeeByField: Employee[] } }>(
+      this.graphUrl,
+      query,
+      { headers }
+    );
+  }
+  
 }

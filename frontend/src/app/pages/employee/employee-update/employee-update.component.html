@@ -1,0 +1,25 @@
+<form [formGroup]="employeeForm" (ngSubmit)="onSubmit()">
+    <h2>Update Employee</h2>
+    <label>First Name: <input formControlName="first_name" /></label><br />
+    <label>Last Name: <input formControlName="last_name" /></label><br />
+    <label>Gender:
+      <select formControlName="gender">
+        <option value="" disabled>Select Gender</option>
+        <option value="Male">Male</option>
+        <option value="Female">Female</option>
+        <option value="Other">Other</option>
+      </select>
+    </label><br />
+    <label>Email: <input formControlName="email" /></label><br />
+    <label>Designation: <input formControlName="designation" /></label><br />
+    <label>Department: <input formControlName="department" /></label><br />
+    <label>Salary: <input type="number" formControlName="salary" /></label><br />
+    <label>Date of Joining: <input type="date" formControlName="date_of_joining" /></label><br />
+    
+    <label>Employee Photo:
+      <input type="file" (change)="onFileChange($event)" />
+    </label><br />
+  
+    <button type="submit" [disabled]="employeeForm.invalid">Update</button>
+  </form>
+  
